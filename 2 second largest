@@ -1,0 +1,31 @@
+module model #(parameter
+  DATA_WIDTH = 32
+) (
+  input clk,
+  input resetn,
+  input [DATA_WIDTH-1:0] din,
+  output logic [DATA_WIDTH-1:0] dout
+);
+logic [DATA_WIDTH-1:0] max1;
+logic [DATA_WIDTH-1:0] max2;
+
+always_ff @(posedge clk) begin
+  if(!resetn) begin
+    max1 <= '0;
+    max2 <= '0;
+    dout <= '0;
+  end
+  else begin
+    if(din >=max1) begin
+      max2 <= max1;
+      max1 <= din;
+    end
+    else if(din >= max2) begin
+      max2 <= din;
+    end
+    dout <= max2;
+  end
+end
+assign dout = max2;
+
+endmodule
